@@ -1,0 +1,5 @@
+Sara/N is/V cool/A ./P
+cool/N is/V nice/A ./P
+ice/N is/V cool/A ./P
+is/V ice/N cool/A ?/P
+is/V cool/A ice/N nice/A ?/P

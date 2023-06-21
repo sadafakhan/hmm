@@ -1,0 +1,31 @@
+state_num=6
+sym_num=9
+init_line_num=1
+trans_line_num=9
+emiss_line_num=10
+
+\init
+BOS 1.0
+
+\transition
+A N 0.16666666666666666
+A P 0.8333333333333334
+BOS N 0.6
+BOS V 0.4
+N A 0.4
+N V 0.6
+P EOS 1.0
+V A 0.8
+V N 0.2
+
+\emission
+A nice 0.3333333333333333
+A cool 0.6666666666666666
+BOS <s> 1.0
+EOS </s> 1.0
+P . 0.6
+P ? 0.4
+N ice 0.6
+N cool 0.2
+N Sara 0.2
+V is 1.0

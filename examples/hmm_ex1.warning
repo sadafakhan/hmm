@@ -1,0 +1,11 @@
+state_num=6
+sym_num=11
+warning: different numbers of init_line_num: claimed=2, real=1
+warning: different numbers of trans_line_num: claimed=13, real=15
+warning: different numbers of emission_line_num: claimed=11, real=12
+warning: the trans_prob_sum for state N is 0.9
+warning: the trans_prob_sum for state V is 1.1
+warning: the emiss_prob_sum for state BOS is 0
+warning: the emiss_prob_sum for state N is 0.5
+warning: the emiss_prob_sum for state V is 0.85
+warning: the emiss_prob_sum for state Adv is 0

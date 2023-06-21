@@ -1,0 +1,41 @@
+state_num=46
+sym_num=7903
+init_line_num=1
+trans_line_num=886
+emiss_line_num=8736
+warning: the trans_prob_sum for state , is 0.9999999999999998
+warning: the trans_prob_sum for state : is 1.0000000000000002
+warning: the trans_prob_sum for state CC is 0.9999999999999999
+warning: the trans_prob_sum for state IN is 0.9999999999999998
+warning: the trans_prob_sum for state JJ is 1.0000000000000002
+warning: the trans_prob_sum for state JJS is 0.9999999999999997
+warning: the trans_prob_sum for state NNP is 0.9999999999999997
+warning: the trans_prob_sum for state NNPS is 0.9999999999999999
+warning: the trans_prob_sum for state NNS is 1.0000000000000002
+warning: the trans_prob_sum for state POS is 0.9999999999999998
+warning: the trans_prob_sum for state PRP is 0.9999999999999999
+warning: the trans_prob_sum for state RB is 0.9999999999999998
+warning: the trans_prob_sum for state RBR is 0.9999999999999998
+warning: the trans_prob_sum for state VB is 0.9999999999999998
+warning: the trans_prob_sum for state VBG is 0.9999999999999999
+warning: the trans_prob_sum for state VBN is 0.9999999999999999
+warning: the trans_prob_sum for state VBP is 0.9999999999999998
+warning: the trans_prob_sum for state VBZ is 0.9999999999999998
+warning: the trans_prob_sum for state WRB is 0.9999999999999998
+warning: the trans_prob_sum for state `` is 0.9999999999999998
+warning: the emiss_prob_sum for state CD is 0.9999999999999997
+warning: the emiss_prob_sum for state JJ is 1.000000000000016
+warning: the emiss_prob_sum for state JJR is 1.0000000000000002
+warning: the emiss_prob_sum for state JJS is 0.9999999999999997
+warning: the emiss_prob_sum for state NN is 1.0000000000000122
+warning: the emiss_prob_sum for state NNP is 0.999999999999988
+warning: the emiss_prob_sum for state NNPS is 0.9999999999999994
+warning: the emiss_prob_sum for state NNS is 1.0000000000000107
+warning: the emiss_prob_sum for state RB is 1.0000000000000002
+warning: the emiss_prob_sum for state RBR is 0.9999999999999999
+warning: the emiss_prob_sum for state RP is 0.9999999999999998
+warning: the emiss_prob_sum for state VB is 0.9999999999999942
+warning: the emiss_prob_sum for state VBG is 0.999999999999996
+warning: the emiss_prob_sum for state VBN is 0.9999999999999968
+warning: the emiss_prob_sum for state VBP is 0.9999999999999963
+warning: the emiss_prob_sum for state VBZ is 0.999999999999997

@@ -1,0 +1,41 @@
+state_num=6
+sym_num=11
+init_line_num=1
+trans_line_num=14
+emiss_line_num=12
+
+\init
+BOS     1.0 
+	
+	
+
+\transition
+BOS     DT      0.4
+BOS     Adj     0.1
+BOS     N       0.4
+BOS     V       0.1
+N	N	0.2
+N	V	0.8
+DT	N	0.8
+DT	Adj	0.2
+V	DT	0.4
+V	Adj	0.3
+V	N	0.2
+V	Adv	0.1
+Adv	Adj	0.9
+Adv	DT	0.1
+Adj     N       1.0
+
+\emission
+DT	the	0.7
+DT	a	0.3
+N	goods	0.1
+N	book	0.3
+V	book	0.1
+N	store	0.1
+V	buy	0.2
+V	bought	0.3
+V	sold	0.25
+Adj	expensive	0.3
+Adj	good	0.2
+Adj	happy	0.5
