@@ -1,5 +1,5 @@
 # hmm
-Takes annotated training data and creates an HMM for a bigram and trigram POS tagger, as well as checks input HMMs for validity. 
+```hmm``` takes annotated training data and creates an HMM for a bigram and trigram POS tagger, as well as checks input HMMs for validity. 
 
 ```create_2gram_hmm.sh```: Program that creates a Hidden Markov Model for a bigram POS tagger.
 
