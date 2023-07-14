@@ -1,3 +1,3 @@
 #!/bin/sh
 
-python3 ./create_3gram_hmm.py $@
+python3 src/create_3gram_hmm.py $@

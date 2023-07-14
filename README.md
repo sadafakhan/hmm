@@ -1,7 +1,7 @@
 # hmm
 ```hmm``` takes annotated training data and creates an HMM for a bigram and trigram POS tagger, as well as checks input HMMs for validity. 
 
-```create_2gram_hmm.sh```: Program that creates a Hidden Markov Model for a bigram POS tagger.
+```create_2gram_hmm.sh```: creates a Hidden Markov Model for a bigram POS tagger.
 
 Args: 
 * ```training_data```: The training data is of the format “w1/t1 .... wn/tn” (cf. wsj sec0.word pos)
@@ -14,7 +14,7 @@ To run:
 cat input/wsj_sec0.word_pos | src/create_2gram_hmm.sh output/2g_hmm
 ```
 
-```create_3gram_hmm.sh```: Program that creates a Hidden Markov Model for a trigram POS tagger.
+```create_3gram_hmm.sh```: creates a Hidden Markov Model for a trigram POS tagger.
 
 Args: 
 * ```training_data```: The training data is of the format “w1/t1 .... wn/tn” (cf. wsj sec0.word pos)
@@ -28,7 +28,7 @@ Returns:
 
 To run: 
 ```
-cat input/wsj_sec0.word_pos | src/create_3gram_hmm.sh output/3g_hmm l1 l2 l3 unk_prob_file
+cat input/wsj_sec0.word_pos | src/create_3gram_hmm.sh output/3g_hmm l1 l2 l3 unk_prob_sec22
 
 ```
 

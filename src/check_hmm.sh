@@ -1,3 +1,3 @@
 #!/bin/sh
 
-python3 ./check_hmm.py $@
+python3 src/check_hmm.py $@

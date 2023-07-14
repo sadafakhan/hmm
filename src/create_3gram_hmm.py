@@ -1,17 +1,10 @@
 import sys
 
-# TODO: change this
-# sentences = sys.stdin.readlines()
-
-with open(sys.argv[1], "r") as f:
-    sentences = f.readlines()
-# print(sentences)
-
-# TODO: change this back to 2, 3, 4, 5
-l1 = sys.argv[3]
-l2 = sys.argv[4]
-l3 = sys.argv[5]
-unk_file = sys.argv[6]
+sentences = sys.stdin.readlines()
+l1 = sys.argv[2]
+l2 = sys.argv[3]
+l3 = sys.argv[4]
+unk_file = sys.argv[5]
 
 # count(tags), initialized with BOS
 tags = {"BOS": len(sentences)}
