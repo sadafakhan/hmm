@@ -1,12 +1,12 @@
 import sys
 from collections import defaultdict
 
-sentences = sys.stdin.readlines()
 l1 = float(sys.argv[2])
 l2 = float(sys.argv[3])
 l3 = float(sys.argv[4])
 unk_file = sys.argv[5]
 
+sentences = sys.stdin.readlines()
 tag_c = defaultdict(int) # count(tags), initialized with BOS
 tag_c["BOS"] = len(sentences)
 word_c = defaultdict(int) # count(words)
@@ -41,11 +41,11 @@ for s in sentences:
         p_p_tag = p_tag
         p_tag = tag
 
-    # handle the end of sentence
+    # handle end of sentence
     last_bigram = p_tag + " EOS"
     bigram_c[last_bigram] += 1
 
-    last_trigram = p_p_tag + " " + p_tag + " EOS"
+    last_trigram = p_p_tag + " " + last_bigram
     trigram_c[last_trigram] += 1
 
 tag_sum = sum(tag_c.values())
@@ -66,10 +66,6 @@ for trigram in trigram_c:
     p1 = tag_c[t3] / tag_sum
     p_int = (l1 * p1) + (l2 * p2) + (l3 * p3)
     transition_probs[trigram] = p_int
-
-    # find P(t_{i-1}, t_{i}) by dividing count(t_{i-1}, t_{i}) by the total #tag_trigrams that start with t_{i-1}
-    # prob = trigram_c[trigram] / tag_c[start_state]
-    # transition_probs[tag_trigram] = prob
 
 # # for each w_{i}, t{i} pair...
 # emission_probs = {}
