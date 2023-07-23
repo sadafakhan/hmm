@@ -1,20 +1,14 @@
 import sys
-import sysconfig
+from collections import defaultdict
 
 sentences = sys.stdin.readlines()
 
 # count(tags), initialized with BOS
 tag_c = defaultdict(int)
 tag_c["BOS"] = len(sentences)
-
-# count(words)
-word_c = defaultdict(int)
-
-# count(w_{i}, t_{i})
-word_tag_c = defaultdict(int)
-
-# count(t_{i-1}, t_{i})
-bigram_c = defaultdict(int)
+word_c = defaultdict(int) # count(words)
+word_tag_c = defaultdict(int) # count(w_{i}, t_{i})
+bigram_c = defaultdict(int) # count(t_{i-1}, t_{i})
 
 for s in sentences:
     pairs = s.split(" ")
@@ -35,26 +29,18 @@ for s in sentences:
         word_tag_c[w_t] += 1
         bigram_c[bigram] += 1
 
-        # update tag
+        # update tags
         p_tag = tag
 
     # handle the end of the sentence
     last_bigram = p_tag + " EOS"
     bigram_c[last_bigram] += 1
 
-state_num = len(tag_c)
-sym_num = len(word_c)
-init_line_num = 1
-trans_line_num = len(bigram_c)
-emiss_line_num = len(word_tag_c)
-
-
 # for each bigram t_{i-1}, t_{i} of tags...
 transition_probs = {}
 for bigram in bigram_c:
     start_state = bigram.split(" ")[0]
-    # find P(t_{i-1}, t_{i}) by dividing count(t_{i-1}, t_{i}) by the total # of bigrams that start with t_{i-1}
-    prob = bigram_c[bigram] / tag_c[start_state]
+    prob = bigram_c[bigram] / tag_c[start_state] # P(t_{i-1}, t_{i}) = count(t_{i-1}, t_{i})/ total # of bigrams that start with t_{i-1}
     transition_probs[bigram] = prob
 
 # for each w_{i}, t{i} pair...
@@ -63,19 +49,18 @@ for p in word_tag_c:
     pair2 = p.split(" ")
     tag = pair2[1]
     word = pair2[0]
-    # P(w_{i} | t{i}) = count(w_{i}, t_{i}) / count(t_{i})
-    prob = word_tag_c[p] / tag_c[tag]
+    prob = word_tag_c[p] / tag_c[tag] # P(w_{i} | t{i}) = count(w_{i}, t_{i}) / count(t_{i})
     emission_probs[tag + " " + word] = prob
 
 
 with open(sys.argv[1], "w") as m:
-    m.write("state_num=" + str(state_num) + "\n")
-    m.write("sym_num=" + str(sym_num) + "\n")
-    m.write("init_line_num=" + str(init_line_num) + "\n")
-    m.write("trans_line_num=" + str(trans_line_num) + "\n")
-    m.write("emiss_line_num=" + str(emiss_line_num) + "\n\n")
+    m.write("state_num=" + str(len(tag_c)) + "\n")
+    m.write("sym_num=" + str(len(word_c)) + "\n")
+    m.write("init_line_num=" + str(1) + "\n")
+    m.write("trans_line_num=" + str(len(bigram_c)) + "\n")
+    m.write("emiss_line_num=" + str(len(word_tag_c)) + "\n\n")
     m.write("\init\n")
-    m.write("BOS\t"+str(init_line_num))
+    m.write("BOS\t"+str(1))
     m.write("\n\n\n")
     m.write("\\transition\n")
 
@@ -95,4 +80,3 @@ with open(sys.argv[1], "w") as m:
         word = trans[1]
 
         m.write(tag + "\t" + word + "\t" + str(emission_probs[transition]) + "\n")
-

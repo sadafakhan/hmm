@@ -7,21 +7,12 @@ l2 = float(sys.argv[3])
 l3 = float(sys.argv[4])
 unk_file = sys.argv[5]
 
-# count(tags), initialized with BOS
-tag_c = defaultdict(int)
+tag_c = defaultdict(int) # count(tags), initialized with BOS
 tag_c["BOS"] = len(sentences)
-
-# count(words)
-word_c = defaultdict(int)
-
-# count(w_{i}, t_{i})
-word_tag_c = defaultdict(int)
-
-# count(t_1, t_2, t_3)
-trigram_c = defaultdict(int)
-
-# count(t_1, t_2)
-bigram_c = defaultdict(int)
+word_c = defaultdict(int) # count(words)
+word_tag_c = defaultdict(int) # count(w_{i}, t_{i})
+trigram_c = defaultdict(int) # count(t_1, t_2, t_3)
+bigram_c = defaultdict(int) # count(t_1, t_2)
 
 for s in sentences:
     pairs = s.split(" ")
@@ -57,22 +48,24 @@ for s in sentences:
     last_trigram = p_p_tag + " " + p_tag + " EOS"
     trigram_c[last_trigram] += 1
 
-transition_probs = defaultdict(int) 
+tag_sum = sum(tag_c.values())
+
+transition_probs = {}
 for trigram in trigram_c:
     t1, t2, t3 = trigram.split()
-    bigram1 = t1 + " " + t2
-    bigram2 = t2 + " " + t3
-    if bigram1 in bigram_c: 
-        p3 = trigram_c[trigram] / bigram_c[bigram1]
+    t1t2 = t1 + " " + t2
+    t2t3 = t2 + " " + t3
+    if t1t2 in bigram_c: 
+        p3 = trigram_c[trigram] / bigram_c[t1t2]
     # if t1 t2 unseen
+    elif t3 == "BOS": 
+        p3 = 0
     else: 
-        if t3 == "BOS": 
-            p3 = 0
-        else: 
-            p3 = 1 / (len(tag_c) + 1)
-    p2 = bigram_c[bigram2]/ tag_c[t2]
-    p1 = tag_c[t3] / len(tag_c)
+        p3 = 1 / (len(tag_c) + 1)
+    p2 = bigram_c[t2t3]/ tag_c[t2]
+    p1 = tag_c[t3] / tag_sum
     p_int = (l1 * p1) + (l2 * p2) + (l3 * p3)
+    transition_probs[trigram] = p_int
 
     # find P(t_{i-1}, t_{i}) by dividing count(t_{i-1}, t_{i}) by the total #tag_trigrams that start with t_{i-1}
     # prob = trigram_c[trigram] / tag_c[start_state]
@@ -93,21 +86,18 @@ with open(sys.argv[1], "w") as m:
     m.write("sym_num=" + str(len(word_c)) + "\n")
     m.write("init_line_num=1\n")
     m.write("trans_line_num=" + str(len(trigram_c)) + "\n")
-    m.write("emiss_line_num=" + "\n\n")
+    m.write("emiss_line_num=" + str(len(word_tag_c)) + "\n\n")
     m.write("\init\n")
     m.write("BOS_BOS\t"+str(float(1)))
     m.write("\n\n")
     m.write("\\transition\n")
 
-    # sorted_transitions = sorted(transition_probs)
-    # for transition in sorted_transitions:
-    #     trans = transition.split(" ")
-    #     start_state = trans[0]
-    #     end_state = trans[1]
+    sorted_transitions = sorted(transition_probs)
+    for transition in sorted_transitions:
+        t1, t2, t3 = transition.split()
+        m.write(t1 + "_" + t2 + " " + t2 + "_" + t3 + " " + str(transition_probs[transition]) + "\n")
 
-    #     m.write(start_state + "\t" + end_state + "\t" + str(transition_probs[transition]) + "\n")
-
-    # m.write("\n\emission\n")
+    m.write("\n\emission\n")
     # sorted_emissions = sorted(emission_probs)
     # for transition in sorted_emissions:
     #     trans = transition.split(" ")
