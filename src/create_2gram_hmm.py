@@ -37,13 +37,13 @@ for s in sentences:
 
 transition_probs = {}
 for bigram in bigram_c:
-    t1 = bigram.split(" ")[0]
-    prob = bigram_c[bigram] / tag_c[t1] # P(t_{i-1}, t_{i}) = count(t_{i-1}, t_{i})/ total # of bigrams that start with t_{i-1}
+    t1 = bigram.split()[0]
+    prob = bigram_c[bigram] / tag_c[t1] # P(t_{i-1}, t_{i}) = count(t_{i-1}, t_{i})/ count(t_{i-1})
     transition_probs[bigram] = prob
 
 emission_probs = {}
 for p in word_tag_c:
-    word, tag = p.split(" ")
+    word, tag = p.split()
     prob = word_tag_c[p] / tag_c[tag] # P(w_{i} | t{i}) = count(w_{i}, t_{i}) / count(t_{i})
     emission_probs[tag + " " + word] = prob
 
@@ -56,16 +56,14 @@ with open(sys.argv[1], "w") as m:
     m.write("emiss_line_num=" + str(len(word_tag_c)) + "\n\n")
     m.write("\init\n")
     m.write("BOS\t"+str(1))
-    m.write("\n\n\n")
+    m.write("\n\n")
     m.write("\\transition\n")
 
     sorted_transitions = sorted(transition_probs)
     for transition in sorted_transitions:
-        start, end = transition.split()
-        m.write(start + " " + end + " " + str(transition_probs[transition]) + "\n")
+        m.write(transition + " " + str(transition_probs[transition]) + "\n")
 
     m.write("\n\emission\n")
     sorted_emissions = sorted(emission_probs)
     for transition in sorted_emissions:
-        tag, word = transition.split()
-        m.write(tag + "\t" + word + "\t" + str(emission_probs[transition]) + "\n")
+        m.write(transition + " " + str(emission_probs[transition]) + "\n")

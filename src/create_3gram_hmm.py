@@ -5,6 +5,12 @@ l1 = float(sys.argv[2])
 l2 = float(sys.argv[3])
 l3 = float(sys.argv[4])
 unk_file = sys.argv[5]
+unk_probs = {}
+
+with open(unk_file) as f:
+    for line in f.readlines():
+        pos, prob = line.split()
+        unk_probs[pos] = float(prob)
 
 sentences = sys.stdin.readlines()
 tag_c = defaultdict(int) # count(tags), initialized with BOS
@@ -67,15 +73,20 @@ for trigram in trigram_c:
     p_int = (l1 * p1) + (l2 * p2) + (l3 * p3)
     transition_probs[trigram] = p_int
 
-# # for each w_{i}, t{i} pair...
-# emission_probs = {}
-# for pair in word_tag_freq:
-#     pair2 = pair.split(" ")
-#     tag = pair2[1]
-#     word = pair2[0]
-#     # P(w_{i} | t{i}) = count(w_{i}, t_{i}) / count(t_{i})
-#     prob = word_tag_freq[pair] / tags[tag]
-#     emission_probs[tag + " " + word] = prob
+emission_probs = {}
+for p in word_tag_c:
+    word, tag = p.split()
+    prob = word_tag_c[p] / tag_c[tag]  # P(w_{i} | t{i}) = count(w_{i}, t_{i}) / count(t_{i})
+    
+    # smoothing 
+    if tag in unk_probs:
+        if word in word_c: 
+            prob_smooth = prob * (1 - unk_probs[tag])
+            emission_probs[tag + " " + word] = prob_smooth
+        else: 
+            emission_probs[tag + " " + word] = unk_probs[tag]
+    else: 
+         emission_probs[tag + " " + word] = prob
 
 with open(sys.argv[1], "w") as m:
     m.write("state_num=" + str(len(bigram_c)) + "\n")
@@ -94,10 +105,6 @@ with open(sys.argv[1], "w") as m:
         m.write(t1 + "_" + t2 + " " + t2 + "_" + t3 + " " + str(transition_probs[transition]) + "\n")
 
     m.write("\n\emission\n")
-    # sorted_emissions = sorted(emission_probs)
-    # for transition in sorted_emissions:
-    #     trans = transition.split(" ")
-    #     tag = trans[0]
-    #     word = trans[1]
-
-    #     m.write(tag + "\t" + word + "\t" + str(emission_probs[transition]) + "\n")
+    sorted_emissions = sorted(emission_probs)
+    for transition in sorted_emissions:
+        m.write(transition + " " + str(emission_probs[transition]) + "\n")

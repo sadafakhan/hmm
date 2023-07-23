@@ -14,7 +14,7 @@ To run:
 cat input/wsj_sec0.word_pos | src/create_2gram_hmm.sh output/2g_hmm
 ```
 
-```create_3gram_hmm.sh```: creates a Hidden Markov Model for a trigram POS tagger with interpolation smoothing.
+```create_3gram_hmm.sh```: creates a Hidden Markov Model for a trigram POS tagger with interpolation for transition probabilities and < unk > smoothing for emission probabilities. NOTE: this implementation has not been graded; I returned to correct it after my initial submission. The output file ```3g_hmm_0.2_0.3_0.5``` included seems to be a canonical output, whereas my current program outputs probabilities in a different order. 
 
 Args: 
 * ```training_data```: The training data is of the format “w1/t1 .... wn/tn” (cf. wsj sec0.word pos)
