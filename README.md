@@ -14,7 +14,7 @@ To run:
 cat input/wsj_sec0.word_pos | src/create_2gram_hmm.sh output/2g_hmm
 ```
 
-```create_3gram_hmm.sh```: creates a Hidden Markov Model for a trigram POS tagger.
+```create_3gram_hmm.sh```: creates a Hidden Markov Model for a trigram POS tagger with interpolation smoothing.
 
 Args: 
 * ```training_data```: The training data is of the format “w1/t1 .... wn/tn” (cf. wsj sec0.word pos)
@@ -28,7 +28,7 @@ Returns:
 
 To run: 
 ```
-cat input/wsj_sec0.word_pos | src/create_3gram_hmm.sh output/3g_hmm l1 l2 l3 unk_prob_sec22
+cat input/wsj_sec0.word_pos | src/create_3gram_hmm.sh output/3g_hmm l1 l2 l3 input/unk_prob_sec22
 
 ```
 

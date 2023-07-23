@@ -1,0 +1,10 @@
+state_num=886
+sym_num=7903
+init_line_num=1
+trans_line_num=0
+emiss_line_num=
+
+\init
+BOS_BOS	1.0
+
+\transition

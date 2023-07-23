@@ -1,86 +1,70 @@
 import sys
+import sysconfig
 
 sentences = sys.stdin.readlines()
 
 # count(tags), initialized with BOS
-tags = {"BOS": len(sentences)}
+tag_c = defaultdict(int)
+tag_c["BOS"] = len(sentences)
 
 # count(words)
-word_freq = {}
+word_c = defaultdict(int)
 
 # count(w_{i}, t_{i})
-word_tag_freq = {}
+word_tag_c = defaultdict(int)
 
 # count(t_{i-1}, t_{i})
-tag_bigram_freq = {}
+bigram_c = defaultdict(int)
 
-for sentence in sentences:
-    pairs = sentence.split(" ")
-    prev_tag = "BOS"
-    for pair in pairs:
-        pair = pair.strip().split("/")
-        if len(pair) != 2:
-            word = '/'.join(pair[0:2])
+for s in sentences:
+    pairs = s.split(" ")
+    p_tag = "BOS"
+    for p in pairs:
+        p = p.strip().split("/")
+        if len(p) != 2:
+            word = '/'.join(p[0:2])
         else:
-            word = pair[0]
-        tag = pair[-1]
+            word = p[0]
+        tag = p[-1]
+        w_t = word + " " + tag
+        bigram = p_tag + " " + tag 
 
-        # count word frequencies
-        if word in word_freq:
-            word_freq[word] += 1
-        else:
-            word_freq[word] = 1
+        # count frequencies
+        word_c[word] += 1
+        tag_c[tag] += 1
+        word_tag_c[w_t] += 1
+        bigram_c[bigram] += 1
 
-        # count tag frequencies
-        if tag in tags:
-            tags[tag] += 1
-        else:
-            tags[tag] = 1
-
-        # count word-tags pairs themselves
-        word_tag = word + " " + tag
-        if word_tag in word_tag_freq:
-            word_tag_freq[word_tag] += 1
-        else:
-            word_tag_freq[word_tag] = 1
-
-        tag_bigram = prev_tag + " " + tag
-        if tag_bigram in tag_bigram_freq:
-            tag_bigram_freq[tag_bigram] += 1
-        else:
-            tag_bigram_freq[tag_bigram] = 1
-        prev_tag = tag
+        # update tag
+        p_tag = tag
 
     # handle the end of the sentence
-    last_bigram = prev_tag + " EOS"
-    if last_bigram in tag_bigram_freq:
-        tag_bigram_freq[last_bigram] += 1
-    else:
-        tag_bigram_freq[last_bigram] = 1
+    last_bigram = p_tag + " EOS"
+    bigram_c[last_bigram] += 1
 
-state_num = len(tags)
-sym_num = len(word_freq)
+state_num = len(tag_c)
+sym_num = len(word_c)
 init_line_num = 1
-trans_line_num = len(tag_bigram_freq)
-emiss_line_num = len(word_tag_freq)
+trans_line_num = len(bigram_c)
+emiss_line_num = len(word_tag_c)
 
 
 # for each bigram t_{i-1}, t_{i} of tags...
 transition_probs = {}
-for tag_bigram in tag_bigram_freq:
-    start_state = tag_bigram.split(" ")[0]
+for bigram in bigram_c:
+    start_state = bigram.split(" ")[0]
     # find P(t_{i-1}, t_{i}) by dividing count(t_{i-1}, t_{i}) by the total # of bigrams that start with t_{i-1}
-    prob = tag_bigram_freq[tag_bigram] / tags[start_state]
-    transition_probs[tag_bigram] = prob
+    prob = bigram_c[bigram] / tag_c[start_state]
+    transition_probs[bigram] = prob
 
 # for each w_{i}, t{i} pair...
 emission_probs = {}
-for pair in word_tag_freq:
-    pair2 = pair.split(" ")
+for p in word_tag_c:
+    pair2 = p.split(" ")
     tag = pair2[1]
     word = pair2[0]
     # P(w_{i} | t{i}) = count(w_{i}, t_{i}) / count(t_{i})
-    prob = word_tag_freq[pair] / tags[tag]
+    prob = word_tag_c[p] / tag_c[tag]
     emission_probs[tag + " " + word] = prob
 
 
